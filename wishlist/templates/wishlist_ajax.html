@@ -73,7 +73,7 @@
     </tr>
     <tr>
       <td></td>
-    <td>  <button id="submit_btn">Buat Wishlist</button></td>    </tr>
+    <td>  <button id="submit_btn" type="submit" onclick="location.href=`{% url 'wishlist:add_wishlist_ajax' %}`">Buat Wishlist</button></td>    </tr>
   </table>
 </form>
     <div class="mt-3 px-5" >
@@ -85,8 +85,6 @@
         </tr>
         {% for barang in list_barang %}
         <tr>
-            <th
-            >
             <th scope="row">{{barang.nama_barang}}</th>
             <th class="font-weight-light" scope="row">{{barang.harga_barang}}</th>
             <th class="font-weight-light" scope="row">{{barang.deskripsi}}</th>
