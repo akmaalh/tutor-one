@@ -1,3 +1,5 @@
+from asyncio.constants import LOG_THRESHOLD_FOR_CONNLOST_WRITES
+from email import contentmanager
 from http.client import HTTPResponse
 from django.shortcuts import render
 from wishlist.models import BarangWishlist
@@ -22,6 +24,17 @@ def show_wishlist(request):
     'last_login': request.COOKIES['last_login'],
     }
     return render(request, "wishlist.html", context)
+
+@login_required(login_url='/wishlist/login/')
+def show_wishlist_ajax(request):
+    data_barang_wishlist = BarangWishlist.objects.all()
+    context = {
+    'list_barang': data_barang_wishlist,
+    'nama': 'Muhammad Akmal Hakim',
+    'last_login': request.COOKIES['last_login'],
+    }
+    return render(request, "wishlist_ajax.html", context)
+        
 
 def show_xml(request):
     data = BarangWishlist.objects.all()
@@ -70,3 +83,16 @@ def logout_user(request):
     response.delete_cookie ('last_login')
     # return redirect('wishlist:login')
     return response
+
+# create new function to add wishlist with ajax
+@login_required(login_url='/wishlist/login/')
+def add_wishlist_ajax(request):
+    if request.method == 'POST':
+        nama_barang = request.POST.get('nama_barang')
+        harga = request.POST.get('harga')
+        deskripsi = request.POST.get('deskripsi')
+        BarangWishlist.objects.create(nama_barang=nama_barang, harga=harga, deskripsi=deskripsi)
+        # barang.save()
+        return HttpResponse()
+    else:
+        return HttpResponse('error')
